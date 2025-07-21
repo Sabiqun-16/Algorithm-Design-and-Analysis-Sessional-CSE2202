@@ -1,21 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MAX_AMOUNT = 1000;
-const int MAX_COINS = 100;
-
-int coins[MAX_COINS];
-int dp[MAX_AMOUNT + 1];
-
-int minCoins(int amount, int n) {
+int minCoins(int amount, vector<int>& coins, vector<int>& dp) {
     if (amount == 0) return 0;
     if (amount < 0) return INT_MAX;
 
     if (dp[amount] != -1) return dp[amount];
 
     int ans = INT_MAX;
-    for (int i = 0; i < n; i++) {
-        int res = minCoins(amount - coins[i], n);
+    for (int coin : coins) {
+        int res = minCoins(amount - coin, coins, dp);
         if (res != INT_MAX)
             ans = min(ans, 1 + res);
     }
@@ -24,14 +18,11 @@ int minCoins(int amount, int n) {
 }
 
 int main() {
-    int n = 3;
-    coins[0] = 1; coins[1] = 2; coins[2] = 5;
+    vector<int> coins = {1, 2, 5};
     int amount = 11;
+    vector<int> dp(amount + 1, -1);
 
-    memset(dp, -1, sizeof(dp));
-    int result = minCoins(amount, n);
-
+    int result = minCoins(amount, coins, dp);
     cout << "Min coins (Top-Down): " << (result == INT_MAX ? -1 : result) << endl;
     return 0;
 }
-
